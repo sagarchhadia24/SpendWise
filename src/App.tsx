@@ -10,6 +10,8 @@ import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Settings from '@/pages/Settings'
 import Categories from '@/pages/Categories'
+import Expenses from '@/pages/Expenses'
+import AddExpense from '@/pages/AddExpense'
 
 // Placeholder pages — will be replaced in later tasks
 function Placeholder({ title }: { title: string }) {
@@ -29,8 +31,8 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 <Route element={<AppLayout />}>
                   <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
-                  <Route path="/expenses" element={<Placeholder title="Expenses" />} />
-                  <Route path="/expenses/new" element={<Placeholder title="Add Expense" />} />
+                  <Route path="/expenses" element={<Expenses />} />
+                  <Route path="/expenses/new" element={<AddExpense />} />
                   <Route path="/categories" element={<Categories />} />
                   <Route path="/recurring" element={<Placeholder title="Recurring" />} />
                   <Route path="/reports" element={<Placeholder title="Reports" />} />
