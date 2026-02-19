@@ -12,6 +12,8 @@ import Settings from '@/pages/Settings'
 import Categories from '@/pages/Categories'
 import Expenses from '@/pages/Expenses'
 import AddExpense from '@/pages/AddExpense'
+import Recurring from '@/pages/Recurring'
+import Dashboard from '@/pages/Dashboard'
 
 // Placeholder pages — will be replaced in later tasks
 function Placeholder({ title }: { title: string }) {
@@ -30,11 +32,11 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route element={<ProtectedRoute />}>
                 <Route element={<AppLayout />}>
-                  <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/expenses" element={<Expenses />} />
                   <Route path="/expenses/new" element={<AddExpense />} />
                   <Route path="/categories" element={<Categories />} />
-                  <Route path="/recurring" element={<Placeholder title="Recurring" />} />
+                  <Route path="/recurring" element={<Recurring />} />
                   <Route path="/reports" element={<Placeholder title="Reports" />} />
                   <Route path="/settings" element={<Settings />} />
                 </Route>
