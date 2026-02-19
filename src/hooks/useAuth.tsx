@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import type { Profile } from '@/types/database'
 
@@ -73,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      async (event, session) => {
         setSession(session)
         setUser(session?.user ?? null)
         if (session?.user) {
@@ -81,6 +82,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           setProfile(p)
         } else {
           setProfile(null)
+          // Show toast when session expires (not on manual sign out)
+          if (event === 'TOKEN_REFRESHED' && !session) {
+            toast.error('Your session has expired. Please sign in again.')
+          }
         }
         setLoading(false)
       }

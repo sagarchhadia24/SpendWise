@@ -14,12 +14,13 @@ export default function Expenses() {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2">
         <h2 className="text-2xl font-bold">Expenses</h2>
-        <Button asChild>
+        <Button asChild size="sm" className="sm:size-default">
           <Link to="/expenses/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Expense
+            <Plus className="mr-1 h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Add Expense</span>
+            <span className="sm:hidden">Add</span>
           </Link>
         </Button>
       </div>

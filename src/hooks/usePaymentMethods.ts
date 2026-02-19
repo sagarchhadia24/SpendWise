@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { PaymentMethod } from '@/types/database'
@@ -20,6 +21,9 @@ export function usePaymentMethods() {
         .order('name')
       if (error) throw error
       setPaymentMethods(data as PaymentMethod[])
+    } catch (error) {
+      toast.error('Failed to load payment methods')
+      console.error(error)
     } finally {
       setLoading(false)
     }

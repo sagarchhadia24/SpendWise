@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { ExpenseWithRelations } from '@/types/database'
@@ -46,6 +47,9 @@ export function useExpenses(filters?: ExpenseFilters) {
       const { data, error } = await query
       if (error) throw error
       setExpenses(data as ExpenseWithRelations[])
+    } catch (error) {
+      toast.error('Failed to load expenses')
+      console.error(error)
     } finally {
       setLoading(false)
     }

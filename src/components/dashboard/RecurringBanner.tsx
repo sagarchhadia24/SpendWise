@@ -69,18 +69,18 @@ export function RecurringBanner({ currency, onAction }: RecurringBannerProps) {
             const CatIcon = getCategoryIcon(expense.category.icon)
             const isProcessing = processingId === expense.id
             return (
-              <div key={expense.id} className="flex items-center justify-between rounded-md border bg-background p-3">
+              <div key={expense.id} className="flex flex-col gap-2 rounded-md border bg-background p-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
-                  <CatIcon className="h-4 w-4" style={{ color: expense.category.color }} />
-                  <div>
-                    <p className="text-sm font-medium">{expense.description || expense.category.name}</p>
+                  <CatIcon className="h-4 w-4 shrink-0" style={{ color: expense.category.color }} />
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium truncate">{expense.description || expense.category.name}</p>
                     <p className="text-xs text-muted-foreground">
                       {formatCurrency(expense.amount, currency)} · {expense.spender}
                     </p>
                   </div>
-                  <Badge variant="secondary" className="capitalize">{expense.frequency}</Badge>
+                  <Badge variant="secondary" className="capitalize shrink-0">{expense.frequency}</Badge>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 self-end sm:self-auto">
                   <Button
                     size="sm"
                     variant="outline"

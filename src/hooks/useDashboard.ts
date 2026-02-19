@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { format, startOfMonth, endOfMonth, getDaysInMonth } from 'date-fns'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { ExpenseWithRelations } from '@/types/database'
@@ -94,6 +95,9 @@ export function useDashboard() {
 
       if (recentError) throw recentError
       setRecentExpenses(recent as ExpenseWithRelations[])
+    } catch (error) {
+      toast.error('Failed to load dashboard data')
+      console.error(error)
     } finally {
       setLoading(false)
     }

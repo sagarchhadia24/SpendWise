@@ -38,22 +38,22 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="flex items-center justify-between px-6 py-4">
+      <header className="flex items-center justify-between px-4 py-4 sm:px-6">
         <span className="text-xl font-bold">SpendWise</span>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <ThemeToggle />
-          <Button variant="ghost" asChild>
+          <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex">
             <Link to="/login">Log In</Link>
           </Button>
-          <Button asChild>
+          <Button size="sm" asChild>
             <Link to="/register">Get Started</Link>
           </Button>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="mx-auto max-w-4xl px-6 py-24 text-center">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+      <section className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 sm:py-24">
+        <h1 className="text-3xl font-bold tracking-tight sm:text-5xl">
           Simple expense tracking
           <br />
           for your family

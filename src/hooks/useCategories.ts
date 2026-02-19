@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { Category } from '@/types/database'
@@ -20,6 +21,9 @@ export function useCategories() {
         .order('name')
       if (error) throw error
       setCategories(data as Category[])
+    } catch (error) {
+      toast.error('Failed to load categories')
+      console.error(error)
     } finally {
       setLoading(false)
     }

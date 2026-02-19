@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { addDays, addWeeks, addMonths, addYears, format } from 'date-fns'
+import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { Frequency, RecurringExpenseWithRelations } from '@/types/database'
@@ -30,6 +31,9 @@ export function useRecurringExpenses() {
         .order('next_due_date', { ascending: true })
       if (error) throw error
       setRecurringExpenses(data as RecurringExpenseWithRelations[])
+    } catch (error) {
+      toast.error('Failed to load recurring expenses')
+      console.error(error)
     } finally {
       setLoading(false)
     }
