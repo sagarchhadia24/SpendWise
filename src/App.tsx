@@ -1,8 +1,25 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Toaster } from '@/components/ui/sonner'
+import { AuthProvider } from '@/hooks/useAuth'
+import { ProtectedRoute } from '@/components/layout/ProtectedRoute'
+import Login from '@/pages/Login'
+import Register from '@/pages/Register'
+
 function App() {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <h1 className="text-2xl font-bold p-8">SpendWise</h1>
-    </div>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<div className="p-8">Dashboard (coming soon)</div>} />
+          </Route>
+          <Route path="*" element={<Login />} />
+        </Routes>
+        <Toaster />
+      </AuthProvider>
+    </BrowserRouter>
   )
 }
 
