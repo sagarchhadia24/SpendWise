@@ -14,11 +14,7 @@ import Expenses from '@/pages/Expenses'
 import AddExpense from '@/pages/AddExpense'
 import Recurring from '@/pages/Recurring'
 import Dashboard from '@/pages/Dashboard'
-
-// Placeholder pages — will be replaced in later tasks
-function Placeholder({ title }: { title: string }) {
-  return <div><h2 className="text-2xl font-bold">{title}</h2><p className="mt-2 text-muted-foreground">Coming soon</p></div>
-}
+import Reports from '@/pages/Reports'
 
 function App() {
   return (
@@ -37,7 +33,7 @@ function App() {
                   <Route path="/expenses/new" element={<AddExpense />} />
                   <Route path="/categories" element={<Categories />} />
                   <Route path="/recurring" element={<Recurring />} />
-                  <Route path="/reports" element={<Placeholder title="Reports" />} />
+                  <Route path="/reports" element={<Reports />} />
                   <Route path="/settings" element={<Settings />} />
                 </Route>
               </Route>
