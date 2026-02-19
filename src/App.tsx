@@ -8,6 +8,8 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import Landing from '@/pages/Landing'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
+import Settings from '@/pages/Settings'
+import Categories from '@/pages/Categories'
 
 // Placeholder pages — will be replaced in later tasks
 function Placeholder({ title }: { title: string }) {
@@ -29,10 +31,10 @@ function App() {
                   <Route path="/dashboard" element={<Placeholder title="Dashboard" />} />
                   <Route path="/expenses" element={<Placeholder title="Expenses" />} />
                   <Route path="/expenses/new" element={<Placeholder title="Add Expense" />} />
-                  <Route path="/categories" element={<Placeholder title="Categories" />} />
+                  <Route path="/categories" element={<Categories />} />
                   <Route path="/recurring" element={<Placeholder title="Recurring" />} />
                   <Route path="/reports" element={<Placeholder title="Reports" />} />
-                  <Route path="/settings" element={<Placeholder title="Settings" />} />
+                  <Route path="/settings" element={<Settings />} />
                 </Route>
               </Route>
             </Routes>
