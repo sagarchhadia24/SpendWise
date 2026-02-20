@@ -71,3 +71,17 @@ export interface RecurringExpenseWithRelations extends RecurringExpense {
   category: Category
   payment_method: PaymentMethod
 }
+
+export type ActivityAction = 'created' | 'updated' | 'deleted'
+export type ActivityEntityType = 'expense' | 'recurring_expense'
+
+export interface ActivityLog {
+  id: string
+  user_id: string
+  entity_type: ActivityEntityType
+  entity_id: string
+  action: ActivityAction
+  old_data: Record<string, unknown> | null
+  new_data: Record<string, unknown> | null
+  created_at: string
+}
