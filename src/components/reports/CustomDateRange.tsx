@@ -93,7 +93,7 @@ export function CustomDateRange({ onExportCsv, onExportPdf }: CustomDateRangePro
                       <XAxis type="number" tick={{ fontSize: 12 }} />
                       <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={80} />
                       <Tooltip formatter={(value) => formatCurrency(Number(value), currency)} />
-                      <Bar dataKey="total" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} />
+                      <Bar dataKey="total" fill="var(--primary)" radius={[0, 4, 4, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : <p className="py-8 text-center text-muted-foreground">No data</p>}

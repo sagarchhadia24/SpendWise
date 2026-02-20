@@ -42,7 +42,7 @@ export function MonthlyBarChart({ data, currency }: MonthlyBarChartProps) {
               formatter={(value) => formatCurrency(Number(value), currency)}
               labelFormatter={(label) => `Date: ${label}`}
             />
-            <Bar dataKey="amount" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="amount" fill="var(--primary)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

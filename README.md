@@ -1,73 +1,126 @@
-# React + TypeScript + Vite
+# SpendWise
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A family-friendly expense tracking web application built with React, TypeScript, and Supabase.
 
-Currently, two official plugins are available:
+**Live:** [spendwise-app-neon.vercel.app](https://spendwise-app-neon.vercel.app)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+- **Dashboard** — Current month overview with stat cards, spending pie chart, daily bar chart, and recent expenses
+- **Expenses** — Full CRUD with inline editing, filters (date range, category, spender, payment method), and sortable columns
+- **Categories** — Custom categories with icon and color picker, plus system defaults
+- **Payment Methods** — Custom payment methods alongside system defaults
+- **Recurring Expenses** — Templates with daily/weekly/monthly/yearly frequency, dashboard notification banner for confirmation
+- **Reports** — Four report tabs: Monthly Summary, Custom Date Range, By Spender, and Category Trend with CSV and PDF export
+- **Activity Log** — Timeline-style audit trail tracking expense and recurring expense changes with expandable field-level diffs
+- **Settings** — Profile management, family members, currency selection, password change, and account deletion (30-day soft delete)
+- **Dark/Light Theme** — Teal/emerald color scheme with system preference detection and localStorage persistence
+- **Responsive Design** — Desktop sidebar layout with mobile hamburger menu
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 19 + TypeScript |
+| Build | Vite 7 |
+| UI Components | shadcn/ui + Radix UI |
+| Styling | Tailwind CSS v4 (OKLCH color space) |
+| Charts | Recharts |
+| Backend | Supabase (PostgreSQL + Auth + RLS + Edge Functions) |
+| Hosting | Vercel (frontend), Supabase Cloud (backend) |
+| Auth | Supabase Auth (email/password) |
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Prerequisites
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- Node.js 18+
+- A [Supabase](https://supabase.com) project
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/sagarchhadia24/SpendWise.git
+   cd SpendWise
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env` file with your Supabase credentials:
+   ```
+   VITE_SUPABASE_URL=https://your-project.supabase.co
+   VITE_SUPABASE_ANON_KEY=your-anon-key
+   ```
+
+4. Run the database migrations in order against your Supabase project (SQL Editor):
+   - `supabase/migrations/001_create_profiles.sql`
+   - `supabase/migrations/002_create_categories.sql`
+   - `supabase/migrations/003_create_payment_methods.sql`
+   - `supabase/migrations/004_create_expenses.sql`
+   - `supabase/migrations/005_create_recurring_expenses.sql`
+   - `supabase/migrations/006_rls_policies.sql`
+   - `supabase/migrations/007_create_activity_logs.sql`
+
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+### Build for Production
+
+```bash
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Deploy
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The project is configured for Vercel deployment. Push to `main` to trigger auto-deploy, or:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npx vercel --prod --yes
 ```
+
+Ensure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set in Vercel environment variables. SPA routing is handled via `vercel.json`.
+
+## Project Structure
+
+```
+src/
+  components/
+    activity/       Activity log timeline and diff components
+    categories/     Category management (create, edit, color/icon picker)
+    dashboard/      Dashboard charts and stat cards
+    expenses/       Expense form, table, filters, delete dialog
+    layout/         Sidebar, TopNav, AppLayout, ThemeToggle
+    recurring/      Recurring expense form and table
+    reports/        Report tabs (monthly, custom range, by spender, category trend)
+    ui/             shadcn/ui component library
+  hooks/            Custom React hooks (useAuth, useExpenses, useActivityLogs, etc.)
+  lib/              Supabase client, constants, utilities
+  pages/            Route page components
+  types/            TypeScript interfaces (database types)
+  utils/            Helpers (currency formatting, CSV/PDF export)
+supabase/
+  migrations/       SQL schema and RLS policies (001-007)
+```
+
+## Database Schema
+
+| Table | Purpose |
+|-------|---------|
+| `profiles` | User settings, family members, currency, soft-delete |
+| `categories` | System defaults + custom per user |
+| `payment_methods` | System defaults + custom per user |
+| `expenses` | Expense records with FK to categories and payment methods |
+| `recurring_expenses` | Templates with frequency, next due date, active flag |
+| `activity_logs` | Audit trail with JSONB old/new data, populated by DB triggers |
+
+All tables have Row Level Security (RLS) enabled. Users can only access their own data. Activity logs are write-protected — only PostgreSQL triggers can insert entries.
+
+## License
+
+MIT

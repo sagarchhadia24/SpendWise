@@ -5,6 +5,7 @@ import {
   Tags,
   Repeat,
   BarChart3,
+  Activity as ActivityIcon,
   Settings,
   LogOut,
 } from 'lucide-react'
@@ -19,6 +20,7 @@ const navItems = [
   { to: '/categories', label: 'Categories', icon: Tags },
   { to: '/recurring', label: 'Recurring', icon: Repeat },
   { to: '/reports', label: 'Reports', icon: BarChart3 },
+  { to: '/activity', label: 'Activity', icon: ActivityIcon },
   { to: '/settings', label: 'Settings', icon: Settings },
 ]
 
@@ -36,7 +38,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   return (
     <div className="flex h-full flex-col">
       <div className="p-6">
-        <h1 className="text-xl font-bold">SpendWise</h1>
+        <h1 className="text-xl font-bold text-primary">SpendWise</h1>
       </div>
       <nav className="flex-1 space-y-1 px-3">
         {navItems.map((item) => (
@@ -46,9 +48,9 @@ export function Sidebar({ onNavigate }: SidebarProps) {
             onClick={onNavigate}
             className={({ isActive }) =>
               cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all',
                 isActive
-                  ? 'bg-primary text-primary-foreground'
+                  ? 'bg-gradient-to-r from-[oklch(0.55_0.15_180)] to-[oklch(0.6_0.17_155)] text-white shadow-[0_4px_12px_oklch(0.55_0.15_180_/_0.3)]'
                   : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
               )
             }
