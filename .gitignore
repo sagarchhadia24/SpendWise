@@ -5,3 +5,5 @@ dist/
 .env*.local
 .worktrees/
 .vercel
+.vite/
+.playwright-mcp/
