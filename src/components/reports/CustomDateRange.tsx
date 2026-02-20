@@ -12,7 +12,7 @@ import { Loader2 } from 'lucide-react'
 
 interface CustomDateRangeProps {
   onExportCsv: (expenses: unknown[]) => void
-  onExportPdf: (startDate: string, endDate: string) => void
+  onExportPdf: (expenses: unknown[], startDate: string, endDate: string) => void
 }
 
 export function CustomDateRange({ onExportCsv, onExportPdf }: CustomDateRangeProps) {
@@ -48,7 +48,7 @@ export function CustomDateRange({ onExportCsv, onExportPdf }: CustomDateRangePro
         {summary && (
           <div className="flex gap-2 ml-auto">
             <Button variant="outline" size="sm" onClick={() => onExportCsv(summary.expenses)}>Export CSV</Button>
-            <Button variant="outline" size="sm" onClick={() => onExportPdf(startDate, endDate)}>Export PDF</Button>
+            <Button variant="outline" size="sm" onClick={() => onExportPdf(summary.expenses, startDate, endDate)}>Export PDF</Button>
           </div>
         )}
       </div>

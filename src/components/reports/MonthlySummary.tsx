@@ -10,7 +10,7 @@ import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react'
 
 interface MonthlySummaryProps {
   onExportCsv: (expenses: unknown[]) => void
-  onExportPdf: (startDate: string, endDate: string) => void
+  onExportPdf: (expenses: unknown[], startDate: string, endDate: string) => void
 }
 
 export function MonthlySummary({ onExportCsv, onExportPdf }: MonthlySummaryProps) {
@@ -51,8 +51,9 @@ export function MonthlySummary({ onExportCsv, onExportPdf }: MonthlySummaryProps
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={() => summary && onExportCsv(summary.expenses)}>Export CSV</Button>
           <Button variant="outline" size="sm" onClick={() => {
+            if (!summary) return
             const d = new Date(year, month, 1)
-            onExportPdf(format(d, 'yyyy-MM-01'), format(new Date(year, month + 1, 0), 'yyyy-MM-dd'))
+            onExportPdf(summary.expenses, format(d, 'yyyy-MM-01'), format(new Date(year, month + 1, 0), 'yyyy-MM-dd'))
           }}>Export PDF</Button>
         </div>
       </div>

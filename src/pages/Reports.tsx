@@ -3,8 +3,7 @@ import { MonthlySummary } from '@/components/reports/MonthlySummary'
 import { CustomDateRange } from '@/components/reports/CustomDateRange'
 import { BySpender } from '@/components/reports/BySpender'
 import { CategoryTrend } from '@/components/reports/CategoryTrend'
-import { exportToCsv } from '@/utils/export'
-import { exportToPdf } from '@/utils/export'
+import { exportToCsv, exportToPdf } from '@/utils/export'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import type { ExpenseWithRelations } from '@/types/database'
 
@@ -16,8 +15,8 @@ export default function Reports() {
     exportToCsv(expenses as ExpenseWithRelations[], currency)
   }
 
-  function handleExportPdf(startDate: string, endDate: string) {
-    exportToPdf({ startDate, endDate })
+  function handleExportPdf(expenses: unknown[], startDate: string, endDate: string) {
+    exportToPdf(expenses as ExpenseWithRelations[], currency, startDate, endDate)
   }
 
   return (
