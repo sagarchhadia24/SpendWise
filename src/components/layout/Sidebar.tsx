@@ -5,6 +5,7 @@ import {
   Tags,
   Repeat,
   BarChart3,
+  Activity as ActivityIcon,
   Settings,
   LogOut,
 } from 'lucide-react'
@@ -19,6 +20,7 @@ const navItems = [
   { to: '/categories', label: 'Categories', icon: Tags },
   { to: '/recurring', label: 'Recurring', icon: Repeat },
   { to: '/reports', label: 'Reports', icon: BarChart3 },
+  { to: '/activity', label: 'Activity', icon: ActivityIcon },
   { to: '/settings', label: 'Settings', icon: Settings },
 ]
 

@@ -15,6 +15,7 @@ import AddExpense from '@/pages/AddExpense'
 import Recurring from '@/pages/Recurring'
 import Dashboard from '@/pages/Dashboard'
 import Reports from '@/pages/Reports'
+import Activity from '@/pages/Activity'
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                   <Route path="/categories" element={<Categories />} />
                   <Route path="/recurring" element={<Recurring />} />
                   <Route path="/reports" element={<Reports />} />
+                  <Route path="/activity" element={<Activity />} />
                   <Route path="/settings" element={<Settings />} />
                 </Route>
               </Route>
