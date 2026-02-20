@@ -1,13 +1,16 @@
 import { useState } from 'react'
 import { useActivityLogs, type ActivityFilters as Filters } from '@/hooks/useActivityLogs'
+import { useAuth } from '@/hooks/useAuth'
 import { ActivityTimeline } from '@/components/activity/ActivityTimeline'
 import { ActivityFilters } from '@/components/activity/ActivityFilters'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 
 export default function Activity() {
+  const { profile } = useAuth()
   const [filters, setFilters] = useState<Filters>({})
-  const { logs, loading, hasMore, loadMore } = useActivityLogs(filters)
+  const { logs, loading, loadingMore, hasMore, loadMore } = useActivityLogs(filters)
+  const currency = profile?.currency || 'USD'
 
   return (
     <div className="space-y-4">
@@ -27,11 +30,18 @@ export default function Activity() {
         </div>
       ) : (
         <>
-          <ActivityTimeline logs={logs} />
+          <ActivityTimeline logs={logs} currency={currency} />
           {hasMore && (
             <div className="flex justify-center pt-4">
-              <Button variant="outline" onClick={loadMore}>
-                Load more
+              <Button variant="outline" onClick={loadMore} disabled={loadingMore}>
+                {loadingMore ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  'Load more'
+                )}
               </Button>
             </div>
           )}

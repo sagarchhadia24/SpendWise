@@ -15,12 +15,14 @@ export function useActivityLogs(filters?: ActivityFilters) {
   const { user } = useAuth()
   const [logs, setLogs] = useState<ActivityLog[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [hasMore, setHasMore] = useState(true)
   const [page, setPage] = useState(0)
 
   const fetchLogs = useCallback(async (pageNum: number, append: boolean) => {
     if (!user) return
     if (pageNum === 0) setLoading(true)
+    if (pageNum > 0) setLoadingMore(true)
     try {
       let query = supabase
         .from('activity_logs')
@@ -52,6 +54,7 @@ export function useActivityLogs(filters?: ActivityFilters) {
       console.error(error)
     } finally {
       setLoading(false)
+      setLoadingMore(false)
     }
   }, [user, filters?.entityType, filters?.action])
 
@@ -69,6 +72,7 @@ export function useActivityLogs(filters?: ActivityFilters) {
   return {
     logs,
     loading,
+    loadingMore,
     hasMore,
     loadMore,
   }

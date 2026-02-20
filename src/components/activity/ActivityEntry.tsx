@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { formatDistanceToNow, format } from 'date-fns'
 import { Plus, Pencil, Trash2, ChevronDown, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { formatCurrency } from '@/utils/format'
 import type { ActivityLog } from '@/types/database'
 
 const actionConfig = {
@@ -26,14 +27,14 @@ const DISPLAY_FIELDS: Record<string, string> = {
 
 const IGNORED_FIELDS = ['id', 'user_id', 'created_at', 'updated_at', 'recurring_expense_id']
 
-function getEntityLabel(log: ActivityLog): string {
+function getEntityLabel(log: ActivityLog, currency: string): string {
   const data = log.new_data || log.old_data
   const desc = data?.description as string
   const amount = data?.amount
   const type = log.entity_type === 'expense' ? 'Expense' : 'Recurring expense'
 
   if (desc) return `${type} "${desc}"`
-  if (amount != null) return `${type} ($${Number(amount).toFixed(2)})`
+  if (amount != null) return `${type} (${formatCurrency(Number(amount), currency)})`
   return type
 }
 
@@ -53,18 +54,19 @@ function getChangedFields(oldData: Record<string, unknown>, newData: Record<stri
   return changes
 }
 
-function formatValue(val: unknown): string {
+function formatValue(val: unknown, currency: string): string {
   if (val == null) return '—'
   if (typeof val === 'boolean') return val ? 'Yes' : 'No'
-  if (typeof val === 'number') return `$${val.toFixed(2)}`
+  if (typeof val === 'number') return formatCurrency(val, currency)
   return String(val)
 }
 
 interface ActivityEntryProps {
   log: ActivityLog
+  currency: string
 }
 
-export function ActivityEntry({ log }: ActivityEntryProps) {
+export function ActivityEntry({ log, currency }: ActivityEntryProps) {
   const [expanded, setExpanded] = useState(false)
   const config = actionConfig[log.action]
   const Icon = config.icon
@@ -79,7 +81,7 @@ export function ActivityEntry({ log }: ActivityEntryProps) {
       <div className="flex-1 min-w-0">
         <div className="flex items-start justify-between gap-2">
           <p className="text-sm">
-            <span className="font-medium">{getEntityLabel(log)}</span>
+            <span className="font-medium">{getEntityLabel(log, currency)}</span>
             {' '}was{' '}
             <span className={cn('font-medium', config.color)}>{config.label}</span>
           </p>
@@ -93,7 +95,7 @@ export function ActivityEntry({ log }: ActivityEntryProps) {
 
         {log.action === 'created' && log.new_data && (
           <div className="mt-1.5 text-xs text-muted-foreground">
-            {log.new_data.amount != null && <span>Amount: ${Number(log.new_data.amount).toFixed(2)}</span>}
+            {log.new_data.amount != null && <span>Amount: {formatCurrency(Number(log.new_data.amount), currency)}</span>}
             {log.new_data.date && <span> · Date: {String(log.new_data.date)}</span>}
             {log.new_data.spender && <span> · By: {String(log.new_data.spender)}</span>}
           </div>
@@ -101,7 +103,7 @@ export function ActivityEntry({ log }: ActivityEntryProps) {
 
         {log.action === 'deleted' && log.old_data && (
           <div className="mt-1.5 text-xs text-muted-foreground">
-            {log.old_data.amount != null && <span>Amount: ${Number(log.old_data.amount).toFixed(2)}</span>}
+            {log.old_data.amount != null && <span>Amount: {formatCurrency(Number(log.old_data.amount), currency)}</span>}
             {log.old_data.description && <span> · {String(log.old_data.description)}</span>}
           </div>
         )}
@@ -121,9 +123,9 @@ export function ActivityEntry({ log }: ActivityEntryProps) {
             {changes.map((c) => (
               <div key={c.field} className="flex flex-wrap gap-1">
                 <span className="font-medium">{c.label}:</span>
-                <span className="text-red-600 line-through dark:text-red-400">{formatValue(c.oldVal)}</span>
+                <span className="text-red-600 line-through dark:text-red-400">{formatValue(c.oldVal, currency)}</span>
                 <span className="text-muted-foreground">→</span>
-                <span className="text-emerald-600 dark:text-emerald-400">{formatValue(c.newVal)}</span>
+                <span className="text-emerald-600 dark:text-emerald-400">{formatValue(c.newVal, currency)}</span>
               </div>
             ))}
           </div>

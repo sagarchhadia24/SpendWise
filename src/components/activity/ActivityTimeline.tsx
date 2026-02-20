@@ -3,7 +3,7 @@ import { ActivityEntry } from '@/components/activity/ActivityEntry'
 import type { ActivityLog } from '@/types/database'
 
 function formatDateGroup(dateStr: string): string {
-  const date = new Date(dateStr)
+  const date = new Date(dateStr + 'T00:00:00')
   if (isToday(date)) return 'Today'
   if (isYesterday(date)) return 'Yesterday'
   return format(date, 'EEEE, MMMM d, yyyy')
@@ -22,9 +22,10 @@ function groupByDate(logs: ActivityLog[]): Map<string, ActivityLog[]> {
 
 interface ActivityTimelineProps {
   logs: ActivityLog[]
+  currency: string
 }
 
-export function ActivityTimeline({ logs }: ActivityTimelineProps) {
+export function ActivityTimeline({ logs, currency }: ActivityTimelineProps) {
   if (logs.length === 0) {
     return (
       <div className="py-12 text-center text-muted-foreground">
@@ -44,7 +45,7 @@ export function ActivityTimeline({ logs }: ActivityTimelineProps) {
           </h3>
           <div className="divide-y divide-border rounded-lg border bg-card p-2">
             {dateLogs.map((log) => (
-              <ActivityEntry key={log.id} log={log} />
+              <ActivityEntry key={log.id} log={log} currency={currency} />
             ))}
           </div>
         </div>
