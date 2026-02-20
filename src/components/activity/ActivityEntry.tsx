@@ -96,15 +96,15 @@ export function ActivityEntry({ log, currency }: ActivityEntryProps) {
         {log.action === 'created' && log.new_data && (
           <div className="mt-1.5 text-xs text-muted-foreground">
             {log.new_data.amount != null && <span>Amount: {formatCurrency(Number(log.new_data.amount), currency)}</span>}
-            {log.new_data.date && <span> · Date: {String(log.new_data.date)}</span>}
-            {log.new_data.spender && <span> · By: {String(log.new_data.spender)}</span>}
+            {log.new_data.date ? <span> · Date: {String(log.new_data.date)}</span> : null}
+            {log.new_data.spender ? <span> · By: {String(log.new_data.spender)}</span> : null}
           </div>
         )}
 
         {log.action === 'deleted' && log.old_data && (
           <div className="mt-1.5 text-xs text-muted-foreground">
             {log.old_data.amount != null && <span>Amount: {formatCurrency(Number(log.old_data.amount), currency)}</span>}
-            {log.old_data.description && <span> · {String(log.old_data.description)}</span>}
+            {log.old_data.description ? <span> · {String(log.old_data.description)}</span> : null}
           </div>
         )}
 
