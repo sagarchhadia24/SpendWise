@@ -3,8 +3,9 @@ import { format, startOfMonth, endOfMonth } from 'date-fns'
 import { useAuth } from '@/hooks/useAuth'
 import { useReports } from '@/hooks/useReports'
 import { formatCurrency } from '@/utils/format'
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PieChartWithLabels } from '@/components/ui/PieChartWithLabels'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -70,15 +71,7 @@ export function CustomDateRange({ onExportCsv, onExportPdf }: CustomDateRangePro
               <CardHeader><CardTitle className="text-base">By Category</CardTitle></CardHeader>
               <CardContent>
                 {summary.categoryBreakdown.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={280}>
-                    <PieChart>
-                      <Pie data={summary.categoryBreakdown} cx="50%" cy="50%" innerRadius={60} outerRadius={100} dataKey="total" nameKey="name" paddingAngle={2}>
-                        {summary.categoryBreakdown.map((entry, i) => <Cell key={i} fill={entry.color} />)}
-                      </Pie>
-                      <Tooltip formatter={(value) => formatCurrency(Number(value), currency)} />
-                      <Legend />
-                    </PieChart>
-                  </ResponsiveContainer>
+                  <PieChartWithLabels data={summary.categoryBreakdown} total={summary.total} currency={currency} />
                 ) : <p className="py-8 text-center text-muted-foreground">No data</p>}
               </CardContent>
             </Card>

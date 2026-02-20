@@ -1,6 +1,5 @@
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { formatCurrency } from '@/utils/format'
+import { PieChartWithLabels } from '@/components/ui/PieChartWithLabels'
 
 interface SpendingPieChartProps {
   data: { name: string; color: string; total: number }[]
@@ -21,34 +20,15 @@ export function SpendingPieChart({ data, currency }: SpendingPieChartProps) {
     )
   }
 
+  const grandTotal = data.reduce((sum, d) => sum + d.total, 0)
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-base">Spending by Category</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={280}>
-          <PieChart>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              innerRadius={60}
-              outerRadius={100}
-              dataKey="total"
-              nameKey="name"
-              paddingAngle={2}
-            >
-              {data.map((entry, index) => (
-                <Cell key={index} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip
-              formatter={(value) => formatCurrency(Number(value), currency)}
-            />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
+        <PieChartWithLabels data={data} total={grandTotal} currency={currency} />
       </CardContent>
     </Card>
   )
