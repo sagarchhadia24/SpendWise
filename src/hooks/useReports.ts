@@ -92,7 +92,7 @@ export function useReports() {
     }
   }
 
-  async function fetchMonthlySummary(month: number, year: number): Promise<ReportSummary> {
+  const fetchMonthlySummary = useCallback(async (month: number, year: number): Promise<ReportSummary> => {
     setLoading(true)
     try {
       const date = new Date(year, month, 1)
@@ -103,9 +103,9 @@ export function useReports() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [fetchExpensesForRange])
 
-  async function fetchDateRangeSummary(startDate: string, endDate: string): Promise<ReportSummary> {
+  const fetchDateRangeSummary = useCallback(async (startDate: string, endDate: string): Promise<ReportSummary> => {
     setLoading(true)
     try {
       const expenses = await fetchExpensesForRange(startDate, endDate)
@@ -113,9 +113,9 @@ export function useReports() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [fetchExpensesForRange])
 
-  async function fetchBySpender(startDate?: string, endDate?: string): Promise<SpenderTotal[]> {
+  const fetchBySpender = useCallback(async (startDate?: string, endDate?: string): Promise<SpenderTotal[]> => {
     setLoading(true)
     try {
       const start = startDate || format(startOfMonth(new Date()), 'yyyy-MM-dd')
@@ -125,9 +125,9 @@ export function useReports() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [fetchExpensesForRange])
 
-  async function fetchCategoryTrend(months: number): Promise<{ data: CategoryTrendPoint[]; categories: { name: string; color: string }[] }> {
+  const fetchCategoryTrend = useCallback(async (months: number): Promise<{ data: CategoryTrendPoint[]; categories: { name: string; color: string }[] }> => {
     if (!user) return { data: [], categories: [] }
     setLoading(true)
     try {
@@ -174,7 +174,7 @@ export function useReports() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user, fetchExpensesForRange])
 
   return {
     loading,

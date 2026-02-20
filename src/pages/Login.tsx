@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useAuth } from '@/hooks/useAuth'
@@ -10,10 +10,17 @@ import { Loader2 } from 'lucide-react'
 
 export default function Login() {
   const navigate = useNavigate()
-  const { signIn, resetPassword } = useAuth()
+  const { user, signIn, resetPassword } = useAuth()
   const [loading, setLoading] = useState(false)
   const [resettingPassword, setResettingPassword] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Navigate to dashboard once auth state updates
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard', { replace: true })
+    }
+  }, [user, navigate])
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -34,10 +41,9 @@ export default function Login() {
     setLoading(true)
     try {
       await signIn(email, password)
-      navigate('/dashboard')
+      // Navigation handled by useEffect above when user state updates
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to sign in')
-    } finally {
       setLoading(false)
     }
   }

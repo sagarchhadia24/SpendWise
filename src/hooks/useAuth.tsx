@@ -63,29 +63,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Fetch profile whenever user changes — runs after render, outside Supabase's
+  // internal navigator.locks so it won't deadlock with auth operations.
+  useEffect(() => {
+    if (user) {
+      fetchProfile(user.id).then(setProfile)
+    } else {
+      setProfile(null)
+    }
+  }, [user?.id])
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
       setUser(session?.user ?? null)
-      if (session?.user) {
-        fetchProfile(session.user.id).then(setProfile)
-      }
       setLoading(false)
     })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         setSession(session)
         setUser(session?.user ?? null)
-        if (session?.user) {
-          const p = await fetchProfile(session.user.id)
-          setProfile(p)
-        } else {
-          setProfile(null)
-          // Show toast when session expires (not on manual sign out)
-          if (event === 'TOKEN_REFRESHED' && !session) {
-            toast.error('Your session has expired. Please sign in again.')
-          }
+        if (!session && event === 'TOKEN_REFRESHED') {
+          toast.error('Your session has expired. Please sign in again.')
         }
         setLoading(false)
       }
@@ -101,11 +101,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       options: { data: { name } },
     })
     if (error) throw error
+    // State is updated by onAuthStateChange; profile fetched by useEffect
   }
 
   async function signIn(email: string, password: string) {
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
+    // State is updated by onAuthStateChange; profile fetched by useEffect
   }
 
   async function signOut() {

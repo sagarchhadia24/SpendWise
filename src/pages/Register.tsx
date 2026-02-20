@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useAuth } from '@/hooks/useAuth'
@@ -10,9 +10,16 @@ import { Loader2 } from 'lucide-react'
 
 export default function Register() {
   const navigate = useNavigate()
-  const { signUp } = useAuth()
+  const { user, signUp } = useAuth()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Navigate to dashboard once auth state updates
+  useEffect(() => {
+    if (user) {
+      navigate('/dashboard', { replace: true })
+    }
+  }, [user, navigate])
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -40,10 +47,9 @@ export default function Register() {
     try {
       await signUp(email, password, name)
       toast.success('Account created! Please check your email to verify your account.')
-      navigate('/dashboard')
+      // Navigation handled by useEffect above when user state updates
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to create account')
-    } finally {
       setLoading(false)
     }
   }
