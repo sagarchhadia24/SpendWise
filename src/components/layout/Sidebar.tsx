@@ -38,7 +38,7 @@ export function Sidebar({ onNavigate }: SidebarProps) {
   return (
     <div className="flex h-full flex-col">
       <div className="p-6">
-        <h1 className="text-xl font-bold text-primary">SpendWise</h1>
+        <NavLink to="/dashboard" className="text-xl font-bold text-primary">SpendWise</NavLink>
       </div>
       <nav className="flex-1 space-y-1 px-3">
         {navItems.map((item) => (

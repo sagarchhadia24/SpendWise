@@ -65,14 +65,14 @@ export function useCategories() {
     await fetchCategories()
   }
 
-  async function getCategoryExpenseCount(id: string): Promise<number> {
+  const getCategoryExpenseCount = useCallback(async (id: string): Promise<number> => {
     const { count, error } = await supabase
       .from('expenses')
       .select('*', { count: 'exact', head: true })
       .eq('category_id', id)
     if (error) throw error
     return count || 0
-  }
+  }, [])
 
   return {
     categories,

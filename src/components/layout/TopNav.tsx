@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
@@ -19,7 +20,7 @@ export function TopNav({ onMenuClick }: TopNavProps) {
         <span className="sr-only">Toggle menu</span>
       </Button>
       <div className="flex-1 lg:hidden">
-        <span className="text-lg font-semibold">SpendWise</span>
+        <Link to="/dashboard" className="text-lg font-semibold">SpendWise</Link>
       </div>
       <div className="flex-1 hidden lg:block" />
       <ThemeToggle />
