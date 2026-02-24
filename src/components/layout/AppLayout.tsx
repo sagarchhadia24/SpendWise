@@ -19,7 +19,7 @@ export function AppLayout() {
   }
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-dvh">
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r bg-background">
         <Sidebar />
@@ -35,7 +35,7 @@ export function AppLayout() {
       </Sheet>
 
       {/* Main content area */}
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col overflow-hidden">
         <TopNav onMenuClick={() => setMobileOpen(true)} />
         <main className="flex-1 overflow-auto p-4 lg:p-6">
           <Outlet />
