@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { TopNav } from '@/components/layout/TopNav'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTitle, SheetDescription } from '@/components/ui/sheet'
 
 export function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -27,7 +27,9 @@ export function AppLayout() {
 
       {/* Mobile sidebar drawer */}
       <Sheet open={mobileOpen} onOpenChange={setSheetOpen}>
-        <SheetContent side="left" className="w-64 p-0">
+        <SheetContent side="left" className="w-64 p-0" aria-describedby={undefined}>
+          <SheetTitle className="sr-only">Navigation</SheetTitle>
+          <SheetDescription className="sr-only">Main navigation menu</SheetDescription>
           <Sidebar onNavigate={() => setSheetOpen(false)} />
         </SheetContent>
       </Sheet>

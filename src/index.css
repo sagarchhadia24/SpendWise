@@ -114,6 +114,15 @@
     --sidebar-ring: oklch(0.55 0.1 180);
 }
 
+/* Radix Dialog/Sheet sets pointer-events: none on body as an inline style
+   while its DismissableLayer is mounted. During close animations (300ms),
+   the layer stays mounted, blocking ALL touch input on the page.
+   This !important override ensures body is always interactive — the dialog
+   overlay (fixed inset-0 z-50) still intercepts taps visually. */
+body {
+  pointer-events: auto !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
