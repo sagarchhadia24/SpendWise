@@ -7,6 +7,17 @@ import { Sheet, SheetContent } from '@/components/ui/sheet'
 export function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
+  // Radix Dialog sets pointer-events: none on document.body while its
+  // DismissableLayer is mounted. During the 300ms close animation the
+  // layer hasn't unmounted yet, so the entire page stays non-interactive.
+  // Reset immediately on close so touches aren't blocked.
+  const setSheetOpen = (open: boolean) => {
+    setMobileOpen(open)
+    if (!open) {
+      document.body.style.pointerEvents = ''
+    }
+  }
+
   return (
     <div className="flex min-h-screen">
       {/* Desktop sidebar */}
@@ -15,9 +26,9 @@ export function AppLayout() {
       </aside>
 
       {/* Mobile sidebar drawer */}
-      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+      <Sheet open={mobileOpen} onOpenChange={setSheetOpen}>
         <SheetContent side="left" className="w-64 p-0">
-          <Sidebar onNavigate={() => setMobileOpen(false)} />
+          <Sidebar onNavigate={() => setSheetOpen(false)} />
         </SheetContent>
       </Sheet>
 
