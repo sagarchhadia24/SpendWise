@@ -127,12 +127,17 @@ body {
    On iOS WebKit (Safari, Chrome, Brave — all use WebKit), these touch
    listeners interfere with normal tap handling across the ENTIRE page,
    making buttons and links outside the chart area unresponsive.
-   Disabling pointer-events on mobile lets touches pass through to the
-   scroll container (scrolling still works) while preventing Recharts
-   from capturing them. Desktop interaction (tooltips) is unaffected. */
+   Disabling pointer-events on the entire chart tree on mobile lets
+   touches pass through to the scroll container (scrolling still works)
+   while preventing Recharts from capturing them.
+   touch-action: pan-y tells iOS to only handle vertical scroll gestures
+   on chart areas, suppressing all other gesture recognition.
+   Desktop interaction (tooltips) is unaffected. */
 @media (max-width: 1023px) {
-  .recharts-wrapper {
+  .recharts-responsive-container,
+  .recharts-responsive-container * {
     pointer-events: none !important;
+    touch-action: pan-y !important;
   }
 }
 
