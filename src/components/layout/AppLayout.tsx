@@ -33,7 +33,7 @@ export function AppLayout() {
       if (Math.abs(t.clientX - startX) > 10 || Math.abs(t.clientY - startY) > 10) return
 
       const el = (e.target as HTMLElement).closest<HTMLElement>(
-        'button, a, [role="button"], [role="tab"]'
+        'button, a, [role="button"], [role="tab"], [role="menuitem"], [role="option"], [role="switch"], [role="checkbox"], [role="radio"]'
       )
       if (!el) return
 
