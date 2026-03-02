@@ -37,7 +37,7 @@ export function AppLayout() {
       {/* Main content area */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopNav onMenuClick={() => setMobileOpen(true)} />
-        <main className="flex-1 overflow-auto p-4 lg:p-6">
+        <main className="relative z-0 flex-1 overflow-auto p-4 lg:p-6">
           <Outlet />
         </main>
       </div>
