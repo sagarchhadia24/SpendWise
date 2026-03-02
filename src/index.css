@@ -130,7 +130,6 @@ body {
   *,
   *::before,
   *::after {
-    touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
     }
   body {
