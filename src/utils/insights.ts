@@ -27,7 +27,7 @@ function groupByCategory(
   const map = new Map<string, number>()
   for (const e of expenses) {
     const name = e.category.name
-    map.set(name, (map.get(name) ?? 0) + e.amount)
+    map.set(name, (map.get(name) ?? 0) + Number(e.amount))
   }
   return map
 }
@@ -108,13 +108,14 @@ function getBudgetPaceInsights(
     const dailyRate = bp.spent / dayOfMonth
     const projected = dailyRate * daysInMonth
 
-    if (projected <= bp.budget.amount || bp.percentage <= 50) continue
+    const budgetAmount = Number(bp.budget.amount)
+    if (projected <= budgetAmount || bp.percentage <= 50) continue
 
-    const projectedPct = (projected / bp.budget.amount) * 100
+    const projectedPct = (projected / budgetAmount) * 100
 
     // Estimate overshoot date: when cumulative spending at current pace
     // would exceed the budget amount
-    const daysToOvershoot = Math.ceil(bp.budget.amount / dailyRate)
+    const daysToOvershoot = Math.ceil(budgetAmount / dailyRate)
     const overshootDate = addDays(monthStart, daysToOvershoot - 1)
     const overshootStr = format(overshootDate, 'MMM d')
 
@@ -126,7 +127,7 @@ function getBudgetPaceInsights(
       icon: 'Target',
       color,
       title: `${categoryName} budget on pace to exceed`,
-      detail: `Projected ${fmt(Math.round(projected), currency)} by month end (budget: ${fmt(bp.budget.amount, currency)}). May exceed by ${overshootStr}.`,
+      detail: `Projected ${fmt(Math.round(projected), currency)} by month end (budget: ${fmt(budgetAmount, currency)}). May exceed by ${overshootStr}.`,
     })
   }
 
@@ -192,8 +193,8 @@ function getTopSpenderInsights(
   let total = 0
 
   for (const e of currentExpenses) {
-    bySpender.set(e.spender, (bySpender.get(e.spender) ?? 0) + e.amount)
-    total += e.amount
+    bySpender.set(e.spender, (bySpender.get(e.spender) ?? 0) + Number(e.amount))
+    total += Number(e.amount)
   }
 
   if (bySpender.size < 2 || total === 0) return []
