@@ -12,9 +12,8 @@ A family-friendly expense tracking web application built with React, TypeScript,
 - **Expenses** — Full CRUD with inline editing, text search on descriptions, filters (date range, category, spender, payment method, amount range), sortable columns, and date presets
 - **Categories** — Custom categories with icon and color picker, plus system defaults
 - **Payment Methods** — Custom payment methods alongside system defaults
-- **Recurring Expenses** — Templates with daily/weekly/monthly/yearly frequency, dashboard notification banner for confirmation
 - **Reports** — Four report tabs: Monthly Summary, Custom Date Range, By Spender, and Category Trend with CSV and PDF export
-- **Activity Log** — Timeline-style audit trail tracking expense and recurring expense changes with expandable field-level diffs
+- **Activity Log** — Timeline-style audit trail tracking expense changes with expandable field-level diffs
 - **Settings** — Profile management, family members, currency selection, password change, and account deletion (30-day soft delete)
 - **Dark/Light Theme** — Teal/emerald color scheme with system preference detection and localStorage persistence
 - **Responsive Design** — Desktop sidebar layout with mobile hamburger menu
@@ -63,7 +62,6 @@ A family-friendly expense tracking web application built with React, TypeScript,
    - `supabase/migrations/002_create_categories.sql`
    - `supabase/migrations/003_create_payment_methods.sql`
    - `supabase/migrations/004_create_expenses.sql`
-   - `supabase/migrations/005_create_recurring_expenses.sql`
    - `supabase/migrations/006_rls_policies.sql`
    - `supabase/migrations/007_create_activity_logs.sql`
 
@@ -98,7 +96,6 @@ src/
     dashboard/      Dashboard charts and stat cards
     expenses/       Expense form, table, filters, delete dialog
     layout/         Sidebar, TopNav, AppLayout, ThemeToggle
-    recurring/      Recurring expense form and table
     reports/        Report tabs (monthly, custom range, by spender, category trend)
     ui/             shadcn/ui component library
   hooks/            Custom React hooks (useAuth, useExpenses, useActivityLogs, etc.)
@@ -118,7 +115,6 @@ supabase/
 | `categories` | System defaults + custom per user |
 | `payment_methods` | System defaults + custom per user |
 | `expenses` | Expense records with FK to categories and payment methods |
-| `recurring_expenses` | Templates with frequency, next due date, active flag |
 | `activity_logs` | Audit trail with JSONB old/new data, populated by DB triggers |
 
 All tables have Row Level Security (RLS) enabled. Users can only access their own data. Activity logs are write-protected — only PostgreSQL triggers can insert entries.

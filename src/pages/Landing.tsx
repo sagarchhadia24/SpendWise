@@ -59,7 +59,7 @@ export default function Landing() {
           for your family
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-          SpendWise helps you track daily expenses, manage recurring payments,
+          SpendWise helps you track daily expenses, set monthly budgets,
           and understand your spending with interactive reports. No complexity, just clarity.
         </p>
         <div className="mt-10 flex items-center justify-center gap-4">

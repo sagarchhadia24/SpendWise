@@ -12,7 +12,6 @@ import Settings from '@/pages/Settings'
 import Categories from '@/pages/Categories'
 import Expenses from '@/pages/Expenses'
 import AddExpense from '@/pages/AddExpense'
-import Recurring from '@/pages/Recurring'
 import Dashboard from '@/pages/Dashboard'
 import Budgets from '@/pages/Budgets'
 import Reports from '@/pages/Reports'
@@ -34,7 +33,6 @@ function App() {
                   <Route path="/expenses" element={<Expenses />} />
                   <Route path="/expenses/new" element={<AddExpense />} />
                   <Route path="/categories" element={<Categories />} />
-                  <Route path="/recurring" element={<Recurring />} />
                   <Route path="/budgets" element={<Budgets />} />
                   <Route path="/reports" element={<Reports />} />
                   <Route path="/activity" element={<Activity />} />
