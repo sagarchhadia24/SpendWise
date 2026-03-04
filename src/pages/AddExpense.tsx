@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useExpenses } from '@/hooks/useExpenses'
 import { ExpenseForm } from '@/components/expenses/ExpenseForm'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function AddExpense() {
@@ -33,6 +34,14 @@ export default function AddExpense() {
         </CardHeader>
         <CardContent>
           <ExpenseForm onSubmit={handleSubmit} />
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-3 w-full"
+            onClick={() => navigate(-1)}
+          >
+            Cancel
+          </Button>
         </CardContent>
       </Card>
     </div>
