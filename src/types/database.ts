@@ -85,3 +85,24 @@ export interface ActivityLog {
   new_data: Record<string, unknown> | null
   created_at: string
 }
+
+export interface Budget {
+  id: string
+  user_id: string
+  category_id: string
+  amount: number
+  month: string
+  created_at: string
+  updated_at: string
+}
+
+export interface BudgetWithCategory extends Budget {
+  category: Category
+}
+
+export interface BudgetProgress {
+  budget: BudgetWithCategory
+  spent: number
+  percentage: number
+  status: 'safe' | 'warning' | 'danger'
+}
