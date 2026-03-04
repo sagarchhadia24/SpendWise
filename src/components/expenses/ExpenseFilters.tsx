@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns'
 import { useAuth } from '@/hooks/useAuth'
 import { useCategories } from '@/hooks/useCategories'
@@ -18,6 +19,26 @@ export function ExpenseFilters({ filters, onChange }: ExpenseFiltersProps) {
   const { profile } = useAuth()
   const { categories } = useCategories()
   const { paymentMethods } = usePaymentMethods()
+
+  const [searchInput, setSearchInput] = useState(filters.search || '')
+
+  // Debounce: propagate search to parent after 300ms of inactivity
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const value = searchInput || undefined
+      if (value !== filters.search) {
+        onChange({ ...filters, search: value })
+      }
+    }, 300)
+    return () => clearTimeout(timer)
+  }, [searchInput])
+
+  // Sync local input when filters are cleared externally
+  useEffect(() => {
+    if (!filters.search && searchInput) {
+      setSearchInput('')
+    }
+  }, [filters.search])
 
   const spenderOptions = [
     profile?.name || 'Me',
@@ -53,8 +74,8 @@ export function ExpenseFilters({ filters, onChange }: ExpenseFiltersProps) {
           type="text"
           placeholder="Search descriptions..."
           className="pl-9"
-          value={filters.search || ''}
-          onChange={(e) => onChange({ ...filters, search: e.target.value || undefined })}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
         />
       </div>
 
