@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { X } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 
 interface ExpenseFiltersProps {
   filters: Filters
@@ -24,24 +24,40 @@ export function ExpenseFilters({ filters, onChange }: ExpenseFiltersProps) {
     ...(profile?.family_members || []),
   ].filter(Boolean)
 
-  function setPreset(preset: 'this-month' | 'last-month') {
+  function setPreset(preset: 'this-month' | 'last-month' | 'last-3-months') {
     const now = new Date()
-    const target = preset === 'last-month' ? subMonths(now, 1) : now
-    onChange({
-      ...filters,
-      startDate: format(startOfMonth(target), 'yyyy-MM-dd'),
-      endDate: format(endOfMonth(target), 'yyyy-MM-dd'),
-    })
+    let start: Date, end: Date
+    if (preset === 'last-3-months') {
+      start = startOfMonth(subMonths(now, 2))
+      end = endOfMonth(now)
+    } else {
+      const target = preset === 'last-month' ? subMonths(now, 1) : now
+      start = startOfMonth(target)
+      end = endOfMonth(target)
+    }
+    onChange({ ...filters, startDate: format(start, 'yyyy-MM-dd'), endDate: format(end, 'yyyy-MM-dd') })
   }
 
   function clearFilters() {
     onChange({})
   }
 
-  const hasFilters = Object.values(filters).some(Boolean)
+  const hasFilters = Object.values(filters).some((v) => v !== undefined && v !== '')
 
   return (
     <div className="space-y-3">
+      {/* Search input */}
+      <div className="relative">
+        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          type="text"
+          placeholder="Search descriptions..."
+          className="pl-9"
+          value={filters.search || ''}
+          onChange={(e) => onChange({ ...filters, search: e.target.value || undefined })}
+        />
+      </div>
+
       <div className="flex flex-wrap items-end gap-3">
         {/* Date presets */}
         <div className="space-y-1">
@@ -52,6 +68,9 @@ export function ExpenseFilters({ filters, onChange }: ExpenseFiltersProps) {
             </Button>
             <Button variant="outline" size="sm" onClick={() => setPreset('last-month')}>
               Last month
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => setPreset('last-3-months')}>
+              Last 3 months
             </Button>
           </div>
         </div>
@@ -131,6 +150,32 @@ export function ExpenseFilters({ filters, onChange }: ExpenseFiltersProps) {
               ))}
             </SelectContent>
           </Select>
+        </div>
+
+        {/* Amount range */}
+        <div className="space-y-1">
+          <Label className="text-xs text-muted-foreground">Min amount</Label>
+          <Input
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0"
+            className="w-28"
+            value={filters.amountMin ?? ''}
+            onChange={(e) => onChange({ ...filters, amountMin: e.target.value ? Number(e.target.value) : undefined })}
+          />
+        </div>
+        <div className="space-y-1">
+          <Label className="text-xs text-muted-foreground">Max amount</Label>
+          <Input
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="Any"
+            className="w-28"
+            value={filters.amountMax ?? ''}
+            onChange={(e) => onChange({ ...filters, amountMax: e.target.value ? Number(e.target.value) : undefined })}
+          />
         </div>
 
         {hasFilters && (
