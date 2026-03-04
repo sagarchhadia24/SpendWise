@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { format, startOfMonth, endOfMonth, getDaysInMonth } from 'date-fns'
+import { format, startOfMonth, endOfMonth, getDaysInMonth, subMonths } from 'date-fns'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
+import { generateInsights } from '@/utils/insights'
+import { formatCurrency } from '@/utils/format'
+import type { Insight } from '@/utils/insights'
 import type { ExpenseWithRelations, BudgetWithCategory, BudgetProgress } from '@/types/database'
 
 interface MonthlyStats {
@@ -18,12 +21,13 @@ interface CategoryBreakdown {
 }
 
 export function useDashboard() {
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
   const [monthlyStats, setMonthlyStats] = useState<MonthlyStats>({ total: 0, averageDaily: 0, count: 0 })
   const [categoryBreakdown, setCategoryBreakdown] = useState<CategoryBreakdown[]>([])
   const [recentExpenses, setRecentExpenses] = useState<ExpenseWithRelations[]>([])
   const [dailySpending, setDailySpending] = useState<{ date: string; amount: number }[]>([])
   const [budgetProgress, setBudgetProgress] = useState<BudgetProgress[]>([])
+  const [insights, setInsights] = useState<Insight[]>([])
   const [loading, setLoading] = useState(true)
 
   const fetchDashboardData = useCallback(async () => {
@@ -118,13 +122,39 @@ export function useDashboard() {
       })
       progress.sort((a, b) => b.percentage - a.percentage)
       setBudgetProgress(progress)
+
+      // Fetch previous month expenses for insights
+      const prevMonth = subMonths(now, 1)
+      const prevMonthStart = format(startOfMonth(prevMonth), 'yyyy-MM-dd')
+      const prevMonthEnd = format(endOfMonth(prevMonth), 'yyyy-MM-dd')
+
+      const { data: prevMonthExpenses, error: prevMonthError } = await supabase
+        .from('expenses')
+        .select('*, category:categories(*), payment_method:payment_methods(*)')
+        .eq('user_id', user.id)
+        .gte('date', prevMonthStart)
+        .lte('date', prevMonthEnd)
+        .order('date', { ascending: false })
+
+      if (prevMonthError) throw prevMonthError
+
+      const prevExpenses = prevMonthExpenses as ExpenseWithRelations[]
+      const currency = profile?.currency || 'USD'
+      const generatedInsights = generateInsights(
+        expenses,
+        prevExpenses,
+        progress,
+        formatCurrency,
+        currency
+      )
+      setInsights(generatedInsights)
     } catch (error) {
       toast.error('Failed to load dashboard data')
       console.error(error)
     } finally {
       setLoading(false)
     }
-  }, [user])
+  }, [user, profile])
 
   useEffect(() => {
     fetchDashboardData()
@@ -136,6 +166,7 @@ export function useDashboard() {
     recentExpenses,
     dailySpending,
     budgetProgress,
+    insights,
     loading,
     refreshDashboard: fetchDashboardData,
   }
