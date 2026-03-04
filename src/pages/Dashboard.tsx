@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { useDashboard } from '@/hooks/useDashboard'
 import { StatCards } from '@/components/dashboard/StatCards'
+import { BudgetProgress } from '@/components/dashboard/BudgetProgress'
 import { SpendingPieChart } from '@/components/dashboard/SpendingPieChart'
 import { MonthlyBarChart } from '@/components/dashboard/MonthlyBarChart'
 import { RecurringBanner } from '@/components/dashboard/RecurringBanner'
@@ -16,6 +17,7 @@ export default function Dashboard() {
     categoryBreakdown,
     recentExpenses,
     dailySpending,
+    budgetProgress,
     loading,
     refreshDashboard,
   } = useDashboard()
@@ -51,6 +53,8 @@ export default function Dashboard() {
         count={monthlyStats.count}
         currency={currency}
       />
+
+      <BudgetProgress budgets={budgetProgress} currency={currency} />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <SpendingPieChart data={categoryBreakdown} currency={currency} />

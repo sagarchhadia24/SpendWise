@@ -3,7 +3,7 @@ import { format, startOfMonth, endOfMonth, getDaysInMonth } from 'date-fns'
 import { toast } from 'sonner'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
-import type { ExpenseWithRelations } from '@/types/database'
+import type { ExpenseWithRelations, BudgetWithCategory, BudgetProgress } from '@/types/database'
 
 interface MonthlyStats {
   total: number
@@ -23,6 +23,7 @@ export function useDashboard() {
   const [categoryBreakdown, setCategoryBreakdown] = useState<CategoryBreakdown[]>([])
   const [recentExpenses, setRecentExpenses] = useState<ExpenseWithRelations[]>([])
   const [dailySpending, setDailySpending] = useState<{ date: string; amount: number }[]>([])
+  const [budgetProgress, setBudgetProgress] = useState<BudgetProgress[]>([])
   const [loading, setLoading] = useState(true)
 
   const fetchDashboardData = useCallback(async () => {
@@ -95,6 +96,28 @@ export function useDashboard() {
 
       if (recentError) throw recentError
       setRecentExpenses(recent as ExpenseWithRelations[])
+
+      // Fetch budgets for current month and compute progress
+      const { data: budgets, error: budgetError } = await supabase
+        .from('budgets')
+        .select('*, category:categories(*)')
+        .eq('user_id', user.id)
+        .eq('month', monthStart)
+
+      if (budgetError) throw budgetError
+
+      const budgetData = budgets as BudgetWithCategory[]
+      const progress: BudgetProgress[] = budgetData.map((budget) => {
+        const spent = expenses
+          .filter((e) => e.category_id === budget.category_id)
+          .reduce((sum, e) => sum + Number(e.amount), 0)
+        const percentage = budget.amount > 0 ? (spent / Number(budget.amount)) * 100 : 0
+        const status: BudgetProgress['status'] =
+          percentage >= 90 ? 'danger' : percentage >= 75 ? 'warning' : 'safe'
+        return { budget, spent, percentage, status }
+      })
+      progress.sort((a, b) => b.percentage - a.percentage)
+      setBudgetProgress(progress)
     } catch (error) {
       toast.error('Failed to load dashboard data')
       console.error(error)
@@ -112,6 +135,7 @@ export function useDashboard() {
     categoryBreakdown,
     recentExpenses,
     dailySpending,
+    budgetProgress,
     loading,
     refreshDashboard: fetchDashboardData,
   }
