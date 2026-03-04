@@ -10,6 +10,9 @@ export interface ExpenseFilters {
   categoryId?: string
   spender?: string
   paymentMethodId?: string
+  search?: string
+  amountMin?: number
+  amountMax?: number
 }
 
 export function useExpenses(filters?: ExpenseFilters) {
@@ -43,6 +46,15 @@ export function useExpenses(filters?: ExpenseFilters) {
       if (filters?.paymentMethodId) {
         query = query.eq('payment_method_id', filters.paymentMethodId)
       }
+      if (filters?.search) {
+        query = query.ilike('description', `%${filters.search}%`)
+      }
+      if (filters?.amountMin !== undefined) {
+        query = query.gte('amount', filters.amountMin)
+      }
+      if (filters?.amountMax !== undefined) {
+        query = query.lte('amount', filters.amountMax)
+      }
 
       const { data, error } = await query
       if (error) throw error
@@ -53,7 +65,7 @@ export function useExpenses(filters?: ExpenseFilters) {
     } finally {
       setLoading(false)
     }
-  }, [user, filters?.startDate, filters?.endDate, filters?.categoryId, filters?.spender, filters?.paymentMethodId])
+  }, [user, filters?.startDate, filters?.endDate, filters?.categoryId, filters?.spender, filters?.paymentMethodId, filters?.search, filters?.amountMin, filters?.amountMax])
 
   useEffect(() => {
     fetchExpenses()

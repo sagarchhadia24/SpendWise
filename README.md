@@ -6,8 +6,10 @@ A family-friendly expense tracking web application built with React, TypeScript,
 
 ## Features
 
-- **Dashboard** — Current month overview with stat cards, spending pie chart, daily bar chart, and recent expenses
-- **Expenses** — Full CRUD with inline editing, filters (date range, category, spender, payment method), and sortable columns
+- **Dashboard** — Current month overview with stat cards, budget progress bars, smart spending insights, pie chart, daily bar chart, and recent expenses
+- **Smart Insights** — Auto-generated spending analysis: month-over-month category comparisons, budget pace projections, unusual spending detection, and top spender highlights with color-coded icons
+- **Monthly Budgets** — Set per-category monthly spending limits with color-coded progress bars (green/yellow/red) on the dashboard, plus a dedicated management page with month navigation and inline editing
+- **Expenses** — Full CRUD with inline editing, text search on descriptions, filters (date range, category, spender, payment method, amount range), sortable columns, and date presets
 - **Categories** — Custom categories with icon and color picker, plus system defaults
 - **Payment Methods** — Custom payment methods alongside system defaults
 - **Recurring Expenses** — Templates with daily/weekly/monthly/yearly frequency, dashboard notification banner for confirmation
