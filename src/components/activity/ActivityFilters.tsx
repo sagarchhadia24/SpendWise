@@ -32,7 +32,6 @@ export function ActivityFilters({
         <SelectContent>
           <SelectItem value="all">All types</SelectItem>
           <SelectItem value="expense">Expenses</SelectItem>
-          <SelectItem value="recurring_expense">Recurring</SelectItem>
         </SelectContent>
       </Select>
       <Select

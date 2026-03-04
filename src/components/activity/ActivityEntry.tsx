@@ -18,20 +18,15 @@ const DISPLAY_FIELDS: Record<string, string> = {
   spender: 'Spender',
   category_id: 'Category',
   payment_method_id: 'Payment Method',
-  frequency: 'Frequency',
-  is_active: 'Active',
-  start_date: 'Start Date',
-  end_date: 'End Date',
-  next_due_date: 'Next Due Date',
 }
 
-const IGNORED_FIELDS = ['id', 'user_id', 'created_at', 'updated_at', 'recurring_expense_id']
+const IGNORED_FIELDS = ['id', 'user_id', 'created_at', 'updated_at']
 
 function getEntityLabel(log: ActivityLog, currency: string): string {
   const data = log.new_data || log.old_data
   const desc = data?.description as string
   const amount = data?.amount
-  const type = log.entity_type === 'expense' ? 'Expense' : 'Recurring expense'
+  const type = 'Expense'
 
   if (desc) return `${type} "${desc}"`
   if (amount != null) return `${type} (${formatCurrency(Number(amount), currency)})`

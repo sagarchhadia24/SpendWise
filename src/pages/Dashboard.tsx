@@ -6,7 +6,6 @@ import { BudgetProgress } from '@/components/dashboard/BudgetProgress'
 import { InsightsCard } from '@/components/dashboard/InsightsCard'
 import { SpendingPieChart } from '@/components/dashboard/SpendingPieChart'
 import { MonthlyBarChart } from '@/components/dashboard/MonthlyBarChart'
-import { RecurringBanner } from '@/components/dashboard/RecurringBanner'
 import { RecentExpenses } from '@/components/dashboard/RecentExpenses'
 import { Button } from '@/components/ui/button'
 import { Loader2, Plus } from 'lucide-react'
@@ -21,7 +20,6 @@ export default function Dashboard() {
     budgetProgress,
     insights,
     loading,
-    refreshDashboard,
   } = useDashboard()
 
   const currency = profile?.currency || 'USD'
@@ -46,8 +44,6 @@ export default function Dashboard() {
           </Link>
         </Button>
       </div>
-
-      <RecurringBanner currency={currency} onAction={refreshDashboard} />
 
       <StatCards
         total={monthlyStats.total}
